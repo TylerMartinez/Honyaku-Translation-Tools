@@ -1,21 +1,25 @@
-import { remote }  from 'electron'
 import { objectsHaveSameKeys } from './validationUtils'
-import fs from 'fs'
 
-const configPath = remote.app.getPath('appData') + '\\honyaku\\config.json'
 const initialState = {
   recentProjects: []
 }
 
-export const loadConfig = () => {
+export const loadConfig = async () => {
+  console.log("getting config")
+  const configPath = await remote.appDataPath() + '\\honyaku\\config.json'
+
+  const fileExists = await fs.existsSync(configPath)
+
   // Check if config exists and if not create it
-  if (!fs.existsSync(configPath)) {
-    fs.writeFileSync(configPath, JSON.stringify(initialState))
+  if (!fileExists) {
+    await fs.writeFileSync(configPath, JSON.stringify(initialState))
   }
 
   try {
     // Read in config file
     var config = JSON.parse(fs.readFileSync(configPath))
+
+    console.log(config)
 
     // Check to see if config is in proper state otherwise default to intial
     if (!objectsHaveSameKeys(config, initialState)) {
@@ -28,8 +32,10 @@ export const loadConfig = () => {
   }
 }
 
-export function* updateConfig(config, value, property) {
-  yield fs.writeFile(
+export async function* updateConfig(config, value, property) {
+  const configPath = await remote.appDataPath() + '\\honyaku\\config.json'
+
+  yield await fs.writeFile(
     configPath,
     JSON.stringify({ ...config, [property]: value }),
     (err) => {

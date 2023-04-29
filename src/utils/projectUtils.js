@@ -1,5 +1,3 @@
-import fs from 'fs'
-
 const initialState = () => {return {
     info: {
       projectName: "projectName",
@@ -36,8 +34,26 @@ export function* saveProject(content) {
   yield updateProject(project)
 }
 
+export async function saveProjectAsync(content) {
+  let project = initialState()
+
+  project.info = content
+
+  await updateProjectAsync(project)
+}
+
 export function* updateProject(project) {
   yield fs.writeFile(
+    project.info.projectSaveLocation + '\\' + project.info.projectName + '.hon',
+    JSON.stringify(project),
+    (err) => {
+      if (err) console.log('error', err)
+    }
+  )
+}
+
+export async function updateProjectAsync(project) {
+  await fs.writeFile(
     project.info.projectSaveLocation + '\\' + project.info.projectName + '.hon',
     JSON.stringify(project),
     (err) => {

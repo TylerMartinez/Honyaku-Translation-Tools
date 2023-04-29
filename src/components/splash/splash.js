@@ -29,8 +29,7 @@ const Splash = () => {
   }
 
   // Actions
-  const dispatch = useDispatch()
-  const createProject = () => dispatch({ type: CREATE_PROJECT_REQUEST, payload: getFullState() })
+  const createProject = () => {}
 
   // Variables
   var validForm = noEmptyValuesArr([projectName, projectMedium, projectTitle, projectSaveLocation])

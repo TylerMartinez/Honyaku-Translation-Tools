@@ -1,7 +1,7 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain, session } = require('electron')
 const path = require('path')
 const os = require('os')
-const glob = require('glob')
+const fs = require('fs')
 
 require('electron-reload')('./dist/**/*')
 
@@ -15,25 +15,13 @@ const createWindow = () => {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true
+      preload: path.join(__dirname, 'preload.js'),
+      sandbox: false,
     },
     frame: false,
     minWidth: 620,
     minHeight: 600
   })
-
-  // UPDATE FOR YOUR ENVIRONMENT: REACT DEV TOOLS
-  glob(path.join(os.homedir(), 'AppData/Local/Google/Chrome/User Data/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/')+"*", {}, function(er, files){
-    BrowserWindow.addDevToolsExtension(
-        files[0]
-      )
-  })
-  glob(path.join(os.homedir(), 'AppData/Local/Google/Chrome/User Data/Default/Extensions/lmhkpmbekcpmknklioeibfkpmmfibljd/')+"*", {}, function(er, files){
-    BrowserWindow.addDevToolsExtension(
-        files[0]
-      )
-  })
-
 
   // and load the index.html of the app.
   win.loadFile('./index.html')
@@ -53,7 +41,25 @@ const createWindow = () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', () => {
+  // Handle ipc messages
+  ipcMain.handle('fs:existsSync', (_, filename) => fs.existsSync(filename))
+  ipcMain.handle('fs:writeFileSync', (_, filename, content) =>   fs.writeFileSync(filename, content)) 
+  ipcMain.handle('fs:readFileSync', (_, filename) => fs.readFileSync(filename)) 
+  ipcMain.handle('fs:writeFile', (_, filename) => fs.writeFile(filename))
+  
+  ipcMain.handle('app:getAppdata', () => app.getPath('appData'))
+  ipcMain.handle('app:currentWindow', () => win),
+
+  ipcMain.handle('window:isMaximized', () => win.isMaximized())
+  ipcMain.on('window:maximize', () => win.maximize())
+  ipcMain.on('window:unmaximize', () => win.unmaximize())
+  ipcMain.on('window:minimize', () => win.minimize())
+  ipcMain.on('window:close', () => win.close())
+
+  // Open the window
+  createWindow()
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

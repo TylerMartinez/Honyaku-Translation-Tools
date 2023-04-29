@@ -1,5 +1,3 @@
-import { desktopCapturer, remote } from 'electron'
-
 const handleStream = (stream, crop, callback) => {
   // Create video tag
   var video = document.createElement('video');

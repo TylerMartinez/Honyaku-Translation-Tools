@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Input } from '../atoms'
 import { Row, Column } from '../layouts'
-import { remote } from 'electron'
-
 const FileInput = props => {
   // State Hooks
   var [selectedFile, setSelectedFile] = useState('')

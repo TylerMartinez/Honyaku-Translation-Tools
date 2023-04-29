@@ -9,7 +9,11 @@
     ],
     "globals": {
         "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
+        "SharedArrayBuffer": "readonly",
+        "remote": "readonly",
+        "fs": "readonly",
+        "desktopCapturer": "readonly",
+        "appWindow": "readonly"
     },
     "parserOptions": {
         "ecmaFeatures": {

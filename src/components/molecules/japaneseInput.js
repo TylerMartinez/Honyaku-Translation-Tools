@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { TextArea, StatusLight } from '../atoms'
 import { PillSelector } from '../molecules'
-import * as wanakana from 'wanakana'
-import * as AutoKanji from 'autokanji'
 import { useDebounce } from '../../utils/hooks'
 
 const JapaneseInput = props => {
