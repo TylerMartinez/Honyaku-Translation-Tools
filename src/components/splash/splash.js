@@ -1,16 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
 import { noEmptyValuesArr } from '../../utils/validationUtils'
 import { Button, Input } from '../atoms'
 import TranslatingTitle from './translatingTitle.js'
 import { FileInput } from '../molecules'
 import { Section, Viewport, Row, Column } from '../layouts'
 import RecentProjects from './recentProjects.js'
-import { CREATE_PROJECT_REQUEST } from '../../redux/actionTypes'
+import { ProjectDispatchContext, CREATE_PROJECT_REQUEST } from '../../contexts/projectContext'
 
 // Component
 const Splash = () => {
+  // Contexts
+  const dispatchProject = useContext(ProjectDispatchContext)
 
   // State Hooks
   const [projectName, setProjectName] = useState(null)
@@ -29,7 +30,7 @@ const Splash = () => {
   }
 
   // Actions
-  const createProject = () => {}
+  const createProject = () => dispatchProject({ type: CREATE_PROJECT_REQUEST, payload: getFullState() })
 
   // Variables
   var validForm = noEmptyValuesArr([projectName, projectMedium, projectTitle, projectSaveLocation])
@@ -75,6 +76,7 @@ const Splash = () => {
         </Row>
         <FileInput
           name='projectSaveLocation'
+          fileTitle="Project save location.."
           saveToState={(v) => setProjectSaveLocation(v)}
         />
         <Row>

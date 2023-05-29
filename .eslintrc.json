@@ -13,7 +13,8 @@
         "remote": "readonly",
         "fs": "readonly",
         "desktopCapturer": "readonly",
-        "appWindow": "readonly"
+        "appWindow": "readonly",
+        "dialog": "readonly"
     },
     "parserOptions": {
         "ecmaFeatures": {

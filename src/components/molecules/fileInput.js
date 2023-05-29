@@ -7,11 +7,11 @@ const FileInput = props => {
   var [selectedFile, setSelectedFile] = useState('')
 
   // Functions
-  const onSelect = () => {
-    const fileDestination = remote.dialog.showOpenDialogSync({
-      title: props.fileTitle,
-      properties: ['openDirectory']
-    })
+  const onSelect = async () => {
+    const fileDestination = await dialog.showOpenFileDialog(
+      props.fileTitle,
+      ['openDirectory']
+    )
 
     if (fileDestination) {
       setSelectedFile(fileDestination[0])

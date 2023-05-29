@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, session } = require('electron')
+const { app, BrowserWindow, ipcMain, session, dialog } = require('electron')
 const path = require('path')
 const os = require('os')
 const fs = require('fs')
@@ -56,6 +56,13 @@ app.on('ready', () => {
   ipcMain.on('window:unmaximize', () => win.unmaximize())
   ipcMain.on('window:minimize', () => win.minimize())
   ipcMain.on('window:close', () => win.close())
+
+  ipcMain.handle('dialog:showOpenFileDialog', (_, title, properties) => {
+    return dialog.showOpenDialogSync({
+      title: title,
+      properties:  properties
+    })
+  })
 
   // Open the window
   createWindow()

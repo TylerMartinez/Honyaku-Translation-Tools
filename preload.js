@@ -23,3 +23,7 @@ contextBridge.exposeInMainWorld('fs', {
 contextBridge.exposeInMainWorld('desktopCapturer', {
   getSources: (config) => desktopCapturer.getSources(config),
 })
+
+contextBridge.exposeInMainWorld('dialog', {
+  showOpenFileDialog: (title, properties) => ipcRenderer.invoke('dialog:showOpenFileDialog', title, properties),
+})
